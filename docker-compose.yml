@@ -1,0 +1,8 @@
+version: '2.1'
+services:
+  backend:
+    build: './backend'
+    container_name: CRUD_BACKEND
+    command: npm run start:dev
+    expose:
+      - 5000:5000
