@@ -1,0 +1,7 @@
+FROM node:18.17.0
+
+WORKDIR /crud/frontend
+
+COPY ./package.json ./tsconfig.json ./next.config.js  ./
+
+CMD [ "npm", "i" ]

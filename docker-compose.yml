@@ -1,8 +1,34 @@
-version: '2.1'
+version: '3.1'
 services:
+  mongo:
+    image: mongo
+    container_name: CRUD_MONGO
+    env_file:
+      - ./backend/.env
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./backend/docker-entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/init.js:ro
+
   backend:
-    build: './backend'
+    build: ./backend
     container_name: CRUD_BACKEND
-    command: npm run start:dev
-    expose:
-      - 5000:5000
+    ports:
+      - "5000:5000"
+    restart: always
+    volumes:
+      - ./backend:/crud/backend
+    command: "npm run start:${mode}"
+    depends_on:
+      - mongo
+  frontend:
+    build: ./frontend
+    command: "npm run ${mode}"
+    container_name: CRUD_FRONTEND
+    restart: always
+    ports:
+      - "9090:9090"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/crud/frontend
